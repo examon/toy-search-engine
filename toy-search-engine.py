@@ -252,12 +252,6 @@ class Indexer:
                 if not doc_id in self.__index[token]:
                     self.__index[token].append(doc_id)
 
-    @property
-    def index(self):
-        """ Returns reference to the index.
-        """
-        return self.__index
-
     def __get_postings(self, key: str) -> [int]:
         """ For given key, returns reference to the corresponding posting lists.
         """
@@ -338,6 +332,12 @@ class Indexer:
         parsed = self.__parse_query(query)
         for i in self.__merge(parsed):
             yield self.__collector.get_doc_path(i)
+
+    @property
+    def index(self):
+        """ Returns reference to the index.
+        """
+        return self.__index
 
     def index_stats(self):
         """ Prints bunch of stats about the index.
