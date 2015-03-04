@@ -54,12 +54,12 @@ Then run the query. Currently only Boolean retrieval with binary AND, OR and !(n
 
 To quit the prompt:
 
-    query>:q
+    query> :q
 
 To save the index to the file called index.txt:
 
-    query>:save index.txt
+    query> :save index.txt
 
 To print index data structure to the stdout (this can take a while):
 
-    query>:index
+    query> :index
