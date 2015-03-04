@@ -3,8 +3,6 @@
 
 # Copyright (C) 2015 Tomas Meszaros <exo [at] tty [dot] sk>
 #
-# Just a simple toy search engine.
-#
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
@@ -17,6 +15,10 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+
+""" Just a simple toy search engine.
+"""
 
 import os
 import sys
@@ -33,8 +35,8 @@ MAX_TERM_LENGTH = 20 # don't index terms longer than MAX_TERM_LENGTH chars
 
 def timeit(message: str):
     """
-    Decorator "@timeit". Times execution of decorated function in milliseconds,
-    prints the @message + measured time and ends.
+    Named decorator "@timeit". Times execution of decorated function
+    in milliseconds, prints the @message + measured time and ends.
 
     Note: the is some overhead from the function calls so the measured time is
     not strictly 100% correct (but is good enough).
@@ -43,6 +45,8 @@ def timeit(message: str):
         """ Default decorator @timer.
         """
         def inner(*args, **kwargs):
+            """ This is where is timing for function func happens.
+            """
             start = time.time()
             result = func(*args, **kwargs)
             end = time.time()
@@ -129,7 +133,9 @@ class Collector(object):
         """
         return self.__doc_id_table[doc_path]
 
-    def get_doc_id_set(self) -> [int]:
+    def get_doc_id_list(self) -> [int]:
+        """ Returns all document IDs.
+        """
         return list(self.__doc_path_table.keys())
 
     def get_doc_path(self, doc_id: int) -> str:
@@ -171,7 +177,6 @@ class Tokenizer(object):
     def yield_tokens(self) -> str():
         """ Tokenizes self.__document and yields those tokens.
         """
-        results = []
         for token in self.__document.split():
             if not token.isalnum():
                 continue
@@ -240,12 +245,12 @@ class Indexer:
         print("Indexing...")
         for pair in self.__token_id_list:
             token = pair[0]
-            ID = pair[1]
+            doc_id = pair[1]
             if token not in self.__index:
-                self.__index[token] = [ID]
+                self.__index[token] = [doc_id]
             else:
-                if not ID in self.__index[token]:
-                    self.__index[token].append(ID)
+                if not doc_id in self.__index[token]:
+                    self.__index[token].append(doc_id)
 
     @property
     def index(self):
@@ -258,7 +263,7 @@ class Indexer:
         """
         try:
             return self.__index[key]
-        except KeyError as error:
+        except KeyError:
             print("error: no entry for %s." % key)
             return []
 
@@ -300,7 +305,7 @@ class Indexer:
                         # all ID in the Collectors database and so we get set
                         # of documents IDs where is not "he" present.
                         postings = set(self.__get_postings(value[1:]))
-                        all_doc_id = set(self.__collector.get_doc_id_set())
+                        all_doc_id = set(self.__collector.get_doc_id_list())
                         difference = list(set.difference(all_doc_id, postings))
                         query[idx] = difference
                     else:
@@ -314,9 +319,11 @@ class Indexer:
         Merges @query = [[1,2,3,4], "AND", [2,3,4], "OR, [1,2]]
         into relevant docIDs, e.g. [1,2,3,59,270]
         """
-        if query is None: return []
+        if query is None:
+            return []
         while len(query) > 0:
-            if len(query) == 1: return query[0]
+            if len(query) == 1:
+                return query[0]
             first = set(query[0])
             function = query[1] # some set function from self.__keywords values
             second = set(query[2])
@@ -372,7 +379,7 @@ class Client(object):
             results += 1
         print("{0:d} results.".format(results), end=' ')
 
-    def start_prompt(self, prompt: str = "query> "):
+    def start_prompt(self, prompt: str="query> "):
         """ Starts the prompt.
         """
         print()
