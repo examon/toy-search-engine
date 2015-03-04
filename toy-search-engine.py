@@ -33,7 +33,7 @@ MAX_TERM_LENGTH = 20 # don't index terms longer than MAX_TERM_LENGTH chars
 
 def timeit(message: str):
     """
-    Decorator @timeit. Times execution of decorated function in milliseconds,
+    Decorator "@timeit". Times execution of decorated function in milliseconds,
     prints the @message + measured time and ends.
 
     Note: the is some overhead from the function calls so the measured time is
@@ -58,11 +58,11 @@ class Collector(object):
     Extracts plaintext from the given documents. Plaintext is stored along with
     some additional data and statistics.
 
-    self.__library: {str: str}, e.g. {"/path/doc1.txt": "doc1 content...", ...}
-    self.__doc_id_table: dict, e.g. {"/path/doc1.txt": 1, ...}
-    self.__doc_path_table: dict, e.g. {1: "/path/doc1.txt", ...}
-    self.__curr_doc_id: int
-    self.__dir_path: str, e.g. "/home/joe/mydocuments"
+    @self.__library: {str: str}, e.g. {"/path/doc1.txt": "doc1 content...", ...}
+    @self.__doc_id_table: dict, e.g. {"/path/doc1.txt": 1, ...}
+    @self.__doc_path_table: dict, e.g. {1: "/path/doc1.txt", ...}
+    @self.__curr_doc_id: int
+    @self.__dir_path: str, e.g. "/home/joe/mydocuments"
     """
     def __init__(self, dir_path: str):
         """ dir_path should look like "/home/joe/Documents"
@@ -160,7 +160,7 @@ class Tokenizer(object):
     """
     Takes care of tokenizing plain text.
 
-    self.__document: str, document in plain text
+    @self.__document: str, document in plain text
     """
 
     def __init__(self, document: str):
@@ -184,15 +184,15 @@ class Indexer:
     """
     Takes list of tokens and builds index.
 
-    self.__index: {"term": [file_id1, file_id2, ...], ...}
+    @self.__index: {"term": [file_id1, file_id2, ...], ...}
 
-                  e.g.
+                      e.g.
 
-                  {'a': [1, 2, 3, 4],
-                   'accessible': [1],
-                   'all': [1], ...}
+                   {'a': [1, 2, 3, 4],
+                    'accessible': [1],
+                    'all': [1], ...}
 
-    self.__keywords: {str: function, ...}, This table holds mappings from
+    @self.__keywords: {str: function, ...}, This table holds mappings from
     the available keywords user can use in the query to functions that will
     be executed. E.g. when query contains "he OR she" function set.union will
     be carried on left ("he") and right ("she") term of the query.
@@ -205,6 +205,7 @@ class Indexer:
         """
         self.__index = {}
         self.__keywords = {"AND": set.intersection, "OR": set.union}
+
         self.__collector = Collector(source_dir)
         self.__collector.print_documents_stats()
         self.__token_id_list = self.__tokenize()
@@ -214,6 +215,11 @@ class Indexer:
 
     @timeit("Tokenizer finished after:")
     def __tokenize(self):
+        """ Tokenizes data from collector and returns them as:
+
+        @token_id_list looks like this:
+        [('a', 1), ('a', 2), ('all', 1), ('an', 3), ...]
+        """
         print("Tokenizing...")
         token_id_list = []
         for doc_path in self.__collector.yield_doc_paths():
@@ -230,9 +236,6 @@ class Indexer:
         """
         We are building index from the list of tuples. Each tuple contains one
         token and the document ID where is this token located.
-
-        @token_id_list looks like this:
-        [('a', 1), ('a', 2), ('all', 1), ('an', 3), ...]
         """
         print("Indexing...")
         for pair in self.__token_id_list:
@@ -261,9 +264,9 @@ class Indexer:
 
     def __parse_query(self, query: str) -> list:
         """
-        @query = "cat AND hores OR table"
-
         Returns posting list satisfing query or empty list on error.
+
+        @query: e.g "cat AND hores OR table"
         """
         query = query.split()
 
@@ -309,7 +312,7 @@ class Indexer:
     def __merge(self, query: list) -> [int]:
         """
         Merges @query = [[1,2,3,4], "AND", [2,3,4], "OR, [1,2]]
-        into relevant docIDs [1,2,3,59,270]
+        into relevant docIDs, e.g. [1,2,3,59,270]
         """
         if query is None: return []
         while len(query) > 0:
