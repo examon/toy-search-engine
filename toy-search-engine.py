@@ -311,7 +311,7 @@ class Indexer:
     def __merge(self, query: list) -> [int]:
         """
         Merges @query = [[1,2,3,4], "AND", [2,3,4], "OR, [1,2]]
-        into relevant docIDs, e.g. [1,2,3,59,270]
+        into relevant docIDs: [1,2,3,4].
         """
         if query is None:
             return []
