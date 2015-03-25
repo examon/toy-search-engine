@@ -35,8 +35,8 @@ MAX_TERM_LENGTH = 20 # don't index terms longer than MAX_TERM_LENGTH chars
 
 def timeit(message: str):
     """
-    Named decorator "@timeit". Times execution of decorated function
-    in milliseconds, prints the @message + measured time and ends.
+    Named decorator "@timeit". Times execution of the decorated function
+    in milliseconds. Prints the @message + measured time.
 
     Note: the is some overhead from the function calls so the measured time is
     not strictly 100% correct (but is good enough).
@@ -45,13 +45,13 @@ def timeit(message: str):
         """ Default decorator @timer.
         """
         def inner(*args, **kwargs):
-            """ This is where is timing for function func happens.
+            """ This is where the measurement happens.
             """
             start = time.time()
             result = func(*args, **kwargs)
             end = time.time()
             total_milliseconds = (end - start) * 1000
-            print("%s %f ms" % (message, total_milliseconds))
+            print("%s %.1f ms" % (message, total_milliseconds))
             return result
         return inner
     return timer
@@ -113,7 +113,6 @@ class Collector(object):
                     print("$ iconv -f utf-8 -t utf-8 -c file.txt")
                     exit(1)
 
-    @timeit("Document tables built in:")
     def __build_document_tables(self):
         """ Constructs __doc_id_table and __doc_path_table.
         """
@@ -158,7 +157,7 @@ class Collector(object):
             file_path = self.__dir_path + '/' + source_file
             if os.path.isfile(file_path):
                 library_size += os.path.getsize(file_path)
-        print("Total corpus size: %f MB" % (library_size / 1024 / 1024))
+        print("Total corpus size: %.2f MB" % (library_size / 1024 / 1024))
 
 
 class Tokenizer(object):

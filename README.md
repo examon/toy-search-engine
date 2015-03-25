@@ -4,24 +4,23 @@ This is my simple toy search engine. I do not expect to grow this into anything
 serious, just wanted to try some simple Boolean retrieval.
 
 
-## Example
+## Examples
 
-Start the engine by specifying source directory where are the data you want to index.
+First, start the toy-search-engine.py, where cmd line argument "shakespeare" is the path to the directory containing text files that will be later indexed.
 
     $ python3 toy-search-engine.py shakespeare
-    Documents extracted in: 14.821529 ms
-    Document tables built in: 1.006842 ms
+    Documents extracted in: 9.0 ms
     Number of source documents: 43
-    Total corpus size: 5.095254 MB
+    Total corpus size: 5.10 MB
     Tokenizing...
-    Tokenizer finished after: 10854.145527 ms
+    Tokenizer finished after: 982.4 ms
     Indexing...
-    Index built in: 1378.195286 ms
+    Index built in: 1063.0 ms
     Number of indexed terms: 19889
     Avg number of elements in incidence list: 5
     Avg length of indexed term: 7
 
-Then run the query. Currently only Boolean retrieval with binary AND, OR and !(negation operator):
+Then run the query. Currently only Boolean retrieval with binary AND, OR and !(negation operator) is supported.
 
     query> caesar
     shakespeare/othello
@@ -35,24 +34,24 @@ Then run the query. Currently only Boolean retrieval with binary AND, OR and !(n
     shakespeare/juliuscaesar
     shakespeare/allswellthatendswell
     shakespeare/cymbeline
-    11 results. Query executed in: 2.245665 ms
+    11 results. Query executed in: 2.2 ms
 
     query> romeo AND juliet
     shakespeare/romeoandjuliet
-    1 results. Query executed in: 35.736322 ms
+    1 results. Query executed in: 35.7 ms
 
     query> hamlet OR cleopatra
     shakespeare/hamlet
     shakespeare/antonyandcleopatra
     shakespeare/romeoandjuliet
-    3 results. Query executed in: 1.028538 ms
+    3 results. Query executed in: 1.0 ms
 
     query> hamlet OR cleopatra AND !romeo
     shakespeare/hamlet
     shakespeare/antonyandcleopatra
-    2 results. Query executed in: 1.818657 ms
+    2 results. Query executed in: 1.8 ms
 
-To quit the prompt:
+To quit:
 
     query> :q
 
