@@ -179,7 +179,6 @@ class Tokenizer(object):
         for token in self.__document.split():
             if not token.isalnum():
                 continue
-            # tokens of length <3 and >20 are irrelevant for our use
             if len(token) < MIN_TERM_LENGTH or len(token) > MAX_TERM_LENGTH:
                 continue
             yield token.lower()
